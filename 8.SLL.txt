@@ -1,0 +1,390 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <malloc.h>
+typedef struct emp
+{
+    char name[20];
+int sal;
+    int empid;
+ struct emp *next;
+} *node;
+node accept()
+{
+ node ptr;
+ ptr = (node)malloc(sizeof(struct emp));
+     printf("\n Enter employee name: ");
+     scanf("%s", ptr->name);
+ printf("\n Enter employee id: ");
+ scanf("%d", &ptr->empid);
+ printf("\n Enter employee salary: ");
+    scanf("%d", &ptr->sal);
+ptr->next = NULL;
+return ptr;
+}
+node create(node head)
+{
+node ptr, newnode;
+int ch;
+do
+
+
+    {
+   newnode = accept();
+   if (head == NULL)
+ head = newnode;
+else 
+        {
+ptr = head;
+   while (ptr->next != NULL)
+
+
+            {
+ptr = ptr->next;
+
+
+            }
+ptr->next = newnode;
+
+
+        }
+printf("\n Do you want to add more nodes? (0/1) \n");
+scanf("%d", &ch);
+
+
+    }
+    while (ch == 1)
+        ;
+return head;
+}
+void display(node head)
+{
+node ptr;
+ if (head == NULL)
+printf("\n List is EMPTY!!!");
+else 
+    {
+printf("\n===================================================================");
+printf("\n Name ID Salary");
+printf("\n===================================================================\n");
+while (head != NULL)
+
+
+        {
+printf("\t %-10s", head->name);
+// printf("\t %-10s", head->dpt);
+printf("\t %-7d", head->empid);
+ printf("\t %-7d", head->sal);
+ printf("\n");
+  head = head->next;
+   
+        }
+printf("===================================================================\n");
+
+
+    }
+}
+node addatfirst(node head)
+{
+ node ptr;
+ ptr = accept();
+ptr->next = head;
+ return head;
+}
+node addatpos(node head)
+{
+node ptr1, ptr2;
+ int loc, i;
+printf("\n Enter the location: ");
+ scanf("%d", &loc);
+ ptr1 = accept();
+if (head == NULL)
+head = ptr1;
+else 
+    {
+i = 1;
+ ptr2 = head;
+ while (i < loc - 1)
+
+
+        {
+if (ptr2->next == NULL)
+
+
+            {
+    ("\n Underflow!!!");
+return head;
+   
+            }
+    ptr2 = ptr2->next;
+ i++;
+
+
+        }
+  ptr1->next = ptr2->next;
+ ptr2->next = ptr1;
+
+
+    }
+return head;
+}
+node addatend(node head)
+{
+node ptr, newnode;
+newnode = accept();
+ptr = head;
+while (ptr->next != NULL)
+
+
+    {
+ptr = ptr->next;
+
+
+    }
+ptr->next = newnode;
+newnode->next = NULL;
+return head;
+}
+node deleteatfirst(node head)
+{
+node ptr;
+if (head == NULL)
+printf("\n List is EMPTY!!!");
+else
+    {
+ ptr = head;
+head = head->next;
+ printf("\n Deleted record is:\n");
+  printf("\t %-10s", ptr->name);
+  printf("\t %-10d", ptr->empid);
+printf("\t %-10d", ptr->sal);
+ printf("\n");
+free(ptr);
+
+
+    }
+return head;
+}
+node deleteatpos(node head)
+{
+ node ptr1, ptr2;
+ int key;
+if (head == NULL)
+
+
+    {
+printf("\n List is Empty!!!");
+return head;
+
+
+    }
+else 
+    {
+printf("\n Enter the employee id you want to delete: ");
+scanf("%d", &key);
+ptr1 = head;
+while (ptr1->empid != key && ptr1 != NULL)
+
+
+        {
+ptr2 = ptr1;
+ptr1 = ptr1->next;
+
+
+        }
+if (ptr1 == NULL)
+
+
+        {
+printf("\n Record not found!!!");
+return head;
+ 
+        }
+
+
+    }
+ptr2->next = ptr1->next;
+ptr1->next = NULL;
+printf("\n Deleted record is:\n");
+printf("\t %-10s", ptr1->name);
+printf("\t %-10d", ptr1->empid);
+printf("\t %-10d", ptr1->sal);
+printf("\n");
+free(ptr1);
+return head;
+}
+node deleteatend(node head)
+{
+node ptr1, ptr2;
+ if (head == NULL)
+printf("\n List is EMPTY!!!");
+else 
+    {
+ptr1 = head;
+ while (ptr1->next != NULL)
+
+
+        {
+ptr2 = ptr1;
+ptr1 = ptr1->next;
+
+
+        }
+ptr2->next = NULL;
+printf("\n Deleted record is:\n");
+printf("\t %-10s", ptr1->name);
+// printf("\t %-10s", ptr1->dpt);
+printf("\t %-10d", ptr1->empid);
+printf("\t %-10d", ptr1->sal);
+printf("\n");
+free(ptr1);
+
+
+    }
+return head;
+}
+void search(node head)
+{
+node ptr;
+int key;
+printf("\n Enter the employee id you want to search: ");
+scanf("%d", &key);
+ptr = head;
+while (ptr->empid != key && ptr != NULL)
+ptr = ptr->next;
+if (ptr == NULL)
+printf("\n Record not found\n");
+else
+    printf("\t %-10s", ptr->name);
+ //printf("\t %-10s", ptr->dpt);
+printf("\t %-10d", ptr->empid);
+printf("\t %-10d", ptr->sal);
+ printf("\n");
+}
+void modify(node head)
+{
+int key, i;
+node ptr;
+printf("\n Enter employee id you want to modify: ");
+scanf("%d", &key);
+ptr = head;
+while (ptr->empid != key && ptr != NULL)
+ptr = ptr->next;
+ if (ptr == NULL)
+
+
+    {
+printf("\nRecord not found!!!\n");
+
+
+    }
+     else 
+    {
+ printf("\n Enter employee name: ");
+ scanf("%s", ptr->name);
+printf("\n Enter employee salary: ");
+  scanf("%d", &ptr->sal);
+   
+    }
+}
+void display_reverse(node head)
+{
+if (head != NULL)
+
+
+    {
+display_reverse(head->next);
+printf("\t %-10s", head->name);
+// printf("\t %-10s", head->dpt);
+printf("\t %-10d", head->empid);
+ printf("\t %-10d", head->sal);
+printf("\n");
+
+
+    }
+}
+node actual_reverse(node head)
+{
+node ptr1, ptr2, ptr3;
+ ptr1 = NULL;
+ptr2 = head;
+ ptr3 = ptr2->next;
+ while (ptr2 != NULL)
+
+
+    {
+ptr2->next = ptr1;
+ ptr1 = ptr2;
+ ptr2 = ptr3;
+ if (ptr3 != NULL)
+ ptr3 = ptr3->next;
+
+
+    }
+ return ptr1;
+}
+int main()
+{
+ int choice;
+ node ptr, head = NULL;
+do
+
+
+    {
+ printf("\n1.Create\n2.Display\n3.Insert begin\n4.Insert position ");
+  printf("\n5.Insert end\n6.Delete Begin\n7.Delete position\n8.Delete end");
+printf("\n9.Display reverse\n10.Actual reverse\n11.Search\n12.Modify");
+ printf("\n Enter your choice: ");
+scanf("%d", &choice);
+switch (choice)
+
+
+        {
+ case 1:
+ head = create(head);
+   break;
+ case 2:
+ display(head);
+ break;
+case 3:
+ head = addatfirst(head);
+ break;
+ case 4:
+ head = addatpos(head);
+break;
+case 5:
+ head = addatend(head);
+ break;
+case 6:
+head = deleteatfirst(head);
+break;
+case 7:
+ head = deleteatpos(head);
+break;
+case 8:
+head = deleteatend(head);
+break;
+case 9:
+printf("\n==========================================================");
+   printf("\n Name ID Salary");
+       printf("\n===========================================================\n");
+        display_reverse(head);
+      printf("============================================================\n");
+         break;
+      case 10:
+           head = actual_reverse(head);
+       display(head);
+          break;
+        case 11:
+            search(head);
+            break;
+        case 12:
+            modify(head);
+            break;
+            
+        }
+        
+    }
+    while (choice != 13)
+        ;
+}

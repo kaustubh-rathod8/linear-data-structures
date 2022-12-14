@@ -1,0 +1,407 @@
+#include <stdio.h>
+#include<iostream>
+#include <malloc.h>
+
+using namespace std;
+
+// CREATE A STRUCTURE
+struct emp
+{
+    int empid;
+    int salary;
+    char name[20];
+    char dept[20];
+    struct emp *next;
+    struct emp *prev;
+};
+typedef struct emp *node;
+
+node Accpet()
+{
+    node a;
+    a = (node)malloc(sizeof(struct emp));
+    printf("Enter Employee Name : ");
+    scanf("%s", &a->name);
+    printf("Enter Depertment of Employee : ");
+    scanf("%s", &a->dept);
+    printf("Enter the Empolyee Id : ");
+    scanf("%d", &a->empid);
+    printf("Enter the Salary of Empolyee : ");
+    scanf("%d", &a->salary);
+    a->next = NULL;
+    a->prev = NULL;
+    return (a);
+}
+
+node create(node first)
+{
+    node a, newnode;
+    int ch;
+    do
+    {
+        newnode = Accpet();
+        if (first == NULL)
+        {
+            first = a = newnode;
+        }
+        else
+        {
+            a->next = newnode;
+            newnode->prev = a;
+            a = a->next;
+        }
+        printf("\nDo You Want to add more nodes (0/1) ");
+        scanf("%d", &ch);
+    } while (ch == 1);
+    return first;
+}
+
+// DISPLAY FUNCTION
+void Display(node first)
+{
+    node a;
+    if (first == NULL)
+    {
+        printf("\nList is Empty");
+    }
+    else
+    {
+        printf("\n=====================================================================================================");
+        printf("\n Name\t\tDEPARTMENT\t\tEMP_ID\t\t\t  Salary\t\t");
+        printf("\n=====================================================================================================\n");
+        while (first != NULL)
+        {
+            printf("\n");
+            printf(" %-10s\t", first->name);
+            printf(" %-10s\t\t", first->dept);
+            printf("  %-7d\t\t", first->empid);
+            printf("   %-7d\t", first->salary);
+            first = first->next;
+        }
+    }
+}
+
+// INSERT POSITION
+node Insert_POS(node first)
+{
+    node p, q;
+    int loc, i;
+    printf("\nEnter the location : ");
+    scanf("%d", &loc);
+    p = Accpet();
+    i = 1;
+    q = first;
+    // temp = first;
+    while (i < loc - 1)
+    {
+        if (q->next == NULL)
+        {
+            printf("\n Underflow ");
+            return (first);
+        }
+        q = q->next;
+        i++;
+    }
+    p->next = q->next;
+    q->next->prev = p;
+    q->next = p;
+    p->prev = q;
+    return (first);
+}
+
+// INSERT AT END
+node Insert_End(node first)
+{
+    node a, newnode;
+    newnode = Accpet();
+    // a = Accept
+    a = first;
+    // newnode = first;
+    while (a->next != NULL)
+    // while(newnode->next !=NULL)
+    {
+        a = a->next;
+        // newnode = newnode->next;
+    }
+    a->next = newnode;
+    // newnode->next = a;
+    // a->prev=newnode;
+    newnode->prev = a;
+    return first;
+}
+
+// INSERT AT BEGI
+node Insert_Beg(node first)
+{
+    node a;
+    a = Accpet();
+    a->next = first;
+    first->prev = a;
+    return first;
+}
+
+// INSERT BY AUTOMICALLY SORTED
+node Insert(node first)
+{
+    node a, newnode, temp, q;
+    q = first;
+    newnode = first;
+    temp = first;
+    int m, n, loc;
+    int i = 1;
+    int count = 0;
+    a = Accpet();
+    m = q->empid;
+    if (a->empid < m)
+    {
+        a->next = first;
+        first->prev = a;
+        return a;
+    }
+    // cout<<"Value of m is "<<m;
+    while (q->next != NULL)
+    {
+        if (a->empid > q->empid)
+        {
+            count++;
+        }
+        q = q->next;
+    }
+    n = q->empid;
+    loc = count;
+    if (a->empid > n)
+    {
+        while (newnode->next != NULL)
+        {
+            newnode = newnode->next;
+        }
+        newnode->next = a;
+        a->prev = newnode;
+        return first;
+    }
+    else
+    {
+        while (i < loc)
+        {
+            if (temp->next == NULL)
+            {
+                printf("\n Underflow ");
+                return (first);
+            }
+            temp = temp->next;
+            i++;
+        }
+        a->next = temp->next;
+        temp->next->prev = a;
+        temp->next = a;
+        a->prev = temp;
+        return (first);
+    }
+}
+
+node Delete_Begin(node first)
+{
+    node a;
+    if (first == NULL)
+    {
+        cout << "List is empty " << endl;
+    }
+    else
+    {
+        a = first;
+        first = first->next;
+        first->prev = NULL;
+        cout << "\nDeleted record is : " << a->name << "\t " << a->dept << "\t " << a->empid << " \t" << a->salary;
+        free(a);
+    }
+    return first;
+}
+
+node Delete_Last(node first)
+{
+    node a, b;
+    if (first == NULL)
+    {
+        cout << "\nList is empty ";
+    }
+    else
+    {
+        a = first;
+        while (a->next != NULL)
+        {
+            a = a->next;
+        }
+        b = a->prev;
+        b->next = NULL;
+        a->prev = NULL;
+        cout << "\nDeleted record is : " << a->name << "\t " << a->dept << "\t " << a->empid << " \t" << a->salary;
+        free(a);
+    }
+    return first;
+}
+
+node Delete_Pos(node first, int number)
+{
+    node a, b;
+    // int num;
+    if (first == NULL)
+    {
+        cout << "List is empty " << endl;
+    }
+    else
+    {
+        // cout << "Enter the empolyee Id of deleted record " << endl;
+        // cin >> num;
+        a = first;
+        while (a->empid != number)
+        {
+            a = a->next;
+        }
+        cout << "\nDeleted record is : " << a->name << "\t " << a->dept << "\t " << a->empid << " \t" << a->salary;
+        a->prev->next = a->next;
+        a->next->prev = a->prev;
+        a->next = NULL;
+        a->prev = NULL;
+        free(a);
+    }
+    return (first);
+}
+
+node Delete(node first)
+{
+    node a, b, c;
+    int number;
+    cout << "Enter the empid of record you want to delete ";
+    cin >> number;
+    if (first == NULL)
+    {
+        cout << "List is empty ";
+        return 0;
+    }
+    a = first;
+    b = first;
+    int temp1, temp2;
+    temp1 = a->empid;
+    while (b->next != NULL)
+    {
+        b = b->next;
+    }
+    temp2 = b->empid;
+    if (temp1 == number)
+    {
+        first = Delete_Begin(first);
+        return first;
+    }
+    else if (temp2 == number)
+    {
+        first = Delete_Last(first);
+        return first;
+    }
+    else
+    {
+        first = Delete_Pos(first, number);
+        return first;
+    }
+}
+
+void Search(node first)
+{
+    node a;
+    int empid;
+    cout << "Enter the empid you want to search ";
+    cin >> empid;
+    a = first;
+    while (a != NULL && a->empid != empid)
+    {
+        a = a->next;
+    }
+    if (a == NULL)
+    {
+        cout << "Record not found!!!!......" << endl;
+    }
+    else
+        cout << "The founded record is " << endl;
+        cout << a->name << "\t " << a->dept << "\t " << a->empid << " \t" << a->salary;
+}
+
+void Display_Reverse(node first)
+{
+    node a;
+    if(first!=NULL)
+    {
+        printf("\n=====================================================================================================");
+        printf("\n Name\t\tDEPARTMENT\t\tEMP_ID\t\t\t  Salary\t\t");
+        printf("\n=====================================================================================================\n");
+        for(a=first;a->next!=NULL;a=a->next);
+        for(;a!=NULL;a=a->prev)
+        {
+            printf("\n");
+            printf(" %-10s\t", a->name);
+            printf(" %-10s\t\t", a->dept);
+            printf("  %-7d\t\t", a->empid);
+            printf("   %-7d\t", a->salary);
+        }
+    }
+}
+
+void modify(node first)
+{
+    int key;
+    node ptr;
+    printf("\n Enter employee id you want to modify: ");
+    scanf("%d", &key);
+    ptr = first;
+    while (ptr->empid != key && ptr != NULL)
+        ptr = ptr->next;
+    if (ptr == NULL)
+    {
+        printf("\nRecord not found!!!\n");
+    }
+    else
+    {
+        printf("Enter Employee Name : ");
+        scanf("%s", &ptr->name);
+        printf("Enter Depertment of Employee : ");
+        scanf("%s", &ptr->dept);
+        printf("Enter the Empolyee Id : ");
+        scanf("%d", &ptr->empid);
+        printf("Enter the Salary of Empolyee : ");
+        scanf("%d", &ptr->salary);
+    }
+}
+
+int main()
+{
+    int choice;
+    node a, first = NULL;
+    do
+    {
+        cout << "\n1.Create\n2.Display\n3.Insert\n4.Delete\n5.Search\n6.Display Reverse\n7.Modify\n8.Exit" << endl;
+        cout << "Enter the the choice ";
+        cin >> choice;
+        switch (choice)
+        {
+            case 1:
+                first = create(first);
+                break;
+            case 2:
+                Display(first);
+                break;
+            case 3:
+                first = Insert(first);
+                break;
+            case 4:
+                first = Delete(first);
+                break;
+            case 5:
+                Search(first);
+                break;
+            case 6:
+                Display_Reverse(first);
+                break;
+            case 7:
+                modify(first);
+                break;
+        }
+    } while (choice != 8);
+}

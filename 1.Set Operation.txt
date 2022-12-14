@@ -1,0 +1,132 @@
+#include <stdio.h>
+void accept(int [],int);
+int validate (int[],int);
+void display (int[],int);
+int akela (int[],int,int[],int ,int[]);
+int union12(int[],int,int[],int ,int[]);
+int main (){
+int a1[10],a2[10],a3[10],a4[10];
+int n1,n2,n3,te;
+int count=0;
+int l,y;
+int ch,f;
+do {
+printf("\nENTER CHOICE \n1. Accept 2 sets \n2. Display 2 sets \n3.Students who like only maths \n4.Students who like only science \n5.Students who like either maths or science");
+printf("\nEnter your choice :");
+scanf("%d", &ch);
+switch (ch){
+case 1:
+printf("Enter total no. of students who likes maths: ");
+scanf ("%d",&n1);
+printf("Enter total no. of students who likes science : ");
+scanf("%d",&n2);
+printf("Enter roll no. of students who likes maths\n");
+accept(a1,n1);
+f=validate(a1,n1);
+while (f==0){
+printf("Enter set 1 properly");
+accept(a1,n1);
+f=validate(a1,n1);
+}
+printf("Enter roll no. of students who likes science\n");
+accept(a2,n2);
+f=validate(a2,n2);
+while (f==0){
+printf("Enter set 2 properly");
+accept(a2,n2);
+f=validate(a2,n2);
+}
+break;
+case 2:
+printf("\n Students who likes Maths : ");
+display(a1,n1);
+printf("\n Students who likes Science : ");
+display(a2,n2);
+break;
+case 3:
+y=akela (a1,n1,a2,n2,a3);
+display(a3,y);
+break;
+case 4:
+y=akela (a2,n2,a1,n1,a3);
+display(a3,y);
+break;
+case 5:
+y=union12(a2,n2,a1,n1,a3);
+display(a3,y);
+break;
+}
+}
+while (ch!=6);
+return 0;
+}
+int validate (int set[],int n){
+for (int v1=0;v1<n;v1++){
+for (int v2=0;v2<n;v2++){
+if(set[v1] == set[v2] && v1!=v2){
+return 0;
+}
+}
+return 1;
+}
+}
+void display (int set[],int n){
+printf("{");
+for (int i=0;i<n;i++){
+if (i<(n-1)){
+printf("%d, ", set[i]);
+}
+else {
+printf("%d ", set[i]);
+}
+}
+printf("}");
+}
+void accept (int set[],int n){
+for (int i=0;i<n;i++){
+scanf("%d", &set[i]);
+}
+}
+int akela (int set1[],int n1,int set2[],int n2, int set3[]){
+int n3=0;
+int i,j;
+for (i=0;i<n1;i++){
+for (j=0;j<n2;j++){
+if(set1[i] == set2[j])
+break;
+}
+if(j==n2){
+set3[n3]=set1[i];
+n3++;
+}
+}
+return n3;
+}
+int union12 (int set1[],int n1,int set2[],int n2,int set3[])
+{
+int n3=0,j,y;
+// for(int i=0;i<n1;i++){
+// set3[i]=set1[i];
+// }
+// n3=n1;
+for(int i=0;i<n2;i++){
+for(j=0;j<n1;j++){
+if(set1[j]==set2[i])
+break;
+}
+if(j==n1){
+set3[n3]=set2[i];
+n3++;
+}
+}
+for (int x=0;x<n1;x++){
+for (y=0;y<n2;y++){
+if (set1[x]==set2[y])
+break;
+}
+if(y==n2){
+set3[n3]=set1[x];
+n3++;
+}
+}
+return n3;}

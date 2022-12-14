@@ -1,0 +1,204 @@
+#include<stdio.h>
+#include<conio.h>
+typedef struct item{
+char item_name[50];
+int item_id;
+float item_price;
+int flag;
+}itm;
+itm accept_rec();
+int createdb(itm sdb[10]);
+void display(itm s);
+void displaydb(itm sdb[10],int n);
+int search(itm s[],int n,int key);
+void modify(itm s[],int n,int key);
+void del_logical(itm s[],int n,int key);
+int del(itm s[],int n,int key);
+void sort(itm s[],int n);
+void displaydel(itm sdb[10],int n);
+int main()
+{
+int choice,i,n=0,num;
+itm s[10];
+do
+{
+printf("MENU\n1.Create Database.\n2.Display.\n3.Search.\n4.Modify.\n5.Permanent Delete.\n6.Temporary Delete.\n7.Sort.\n8.Insert Record.\n9.Display Deleted Record.\n10.Exit.\n");
+printf("Enter your Choice: ");
+scanf("%d",&choice);
+switch(choice)
+{
+case 1:
+n=createdb(s);
+break;
+case 2:
+displaydb(s,n);
+break;
+case 3:
+printf("\nEnter the Item id you want to search: ");
+scanf("%d",&num);
+i=search(s,n,num);
+if(i==-1)
+printf("\nRecord not Found");
+else{
+printf("\nDetails of Record Found");
+display(s[i]);
+}
+break;
+case 4:
+printf("\n\nEnter the Item id which you want to Modify:");
+scanf("%d",&num);
+modify(s,n,num);
+break;
+case 5:
+printf("\nEnter Item id which you want to delete permanently:");
+scanf("%d",&num);
+n=del(s,n,num);
+break;
+case 6:
+printf("\nEnter Item id which you want to delete temporarily:");
+scanf("%d",&num);
+del_logical(s,n,num);
+break;
+case 7:
+sort(s,n);
+displaydb(s,n);
+break;
+case 8:
+s[n]=accept_rec();
+n++;
+break;
+case 9:
+displaydel(s,n);
+break;
+}
+}while(choice!=10);
+return 0;
+}
+itm accept_rec()
+{
+itm temp;
+printf("\nEnter Item Details:\n1.Name:");
+scanf("%s",temp.item_name);
+printf("\n2.Item id.:");
+scanf("%d",&temp.item_id);
+printf("\n3.Price:");
+scanf("%f",&temp.item_price);
+temp.flag=0;
+return temp;
+}
+int createdb(itm sdb[10])
+{
+int n=0;
+int i,ch;
+do
+{
+sdb[n]=accept_rec();
+n++;
+printf("Do you want to Insert another Record? (0/1)");
+scanf("%d",&ch);
+} while(ch==1);
+return n; 
+}
+void display(itm s)
+{
+if(s.flag==0)
+{
+printf("\n%s\t%d\t%f",s.item_name,s.item_id,s.item_price);
+printf("\n");
+}
+}
+void displaydb(itm sdb[10],int n)
+{
+int i;
+printf("\nInventory Database\nItem Name\tItem Id\tPrice");
+for(i=0;i<n;i++){
+display(sdb[i]);}
+}
+void displaydel(itm sdb[10],int n)
+{
+int i;
+printf("\nDeleted Database Record\nItem Name\tItem Id\tPrice");
+for(i=0;i<n;i++)
+{
+if(sdb[i].flag==1)
+{
+printf("\n%s\t%d\t%f",sdb[i].item_name,sdb[i].item_id,sdb[i].item_price);
+printf("\n");
+}
+}
+}
+int search(itm s[],int n,int key)
+{
+int i;
+for(i=0;i<n;i++)
+{
+if(s[i].item_id==key && s[i].flag==0)
+return i;
+}
+return -1;
+}
+void modify(itm s[],int n,int key)
+{
+int ch,i;
+i=search(s,n,key);
+if(i==-1)
+{
+printf("\nNo record found. ");
+return;
+}
+printf("\nDo you want to change Name? (0/1)");
+scanf("%d",&ch);
+if(ch==1){
+printf("\nEnter new Name: ");
+scanf("%s",s[i].item_name);
+}
+printf("\nDo you want to change Price? (0/1)");
+scanf("%d",&ch);
+if(ch==1){
+printf("\nEnter new Price: ");
+scanf("%f",&s[i].item_price);
+}
+printf("\nRecord modified successfully.");
+}
+void del_logical(itm s[],int n,int key)
+{
+int ch,i;
+i=search(s,n,key);
+if(i==-1){
+printf("\nNo record found to delete");
+return;
+}
+s[i].flag=1;
+}
+int del(itm s[],int n,int key)
+{
+char ch;
+int i;
+i=search(s,n,key);
+if(i==-1){
+printf("\nNo record found to delete.");
+}
+else{
+printf("\nDeleted Record is:");
+display(s[i]);
+while(i<n){
+s[i]=s[i+1];
+i++;
+}
+}
+n--;
+return n;
+}
+void sort(itm s[],int n){
+int i,j;
+itm temp;
+for(i=0;i<n-1;i++){
+for(j=0;j<n-1;j++){
+if(s[j].item_id>s[j+1].item_id){
+temp=s[j];
+s[j]=s[j+1];
+s[j+1]=temp;
+}
+}
+}
+}

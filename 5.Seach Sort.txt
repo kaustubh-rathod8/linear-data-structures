@@ -1,0 +1,173 @@
+#include <stdio.h>
+
+
+#include <string.h>
+
+
+void accept(char str[][20], int n);
+void display(char str[][20], int n);
+int binarysearch(char str[][20], char strfind[20], int l, int h);
+void bubblesort(char str[][20], int n);
+void selectionsort(char str[][20], int n);
+
+
+int main()
+{
+char str[10][20], strfind[20];
+int n, i, opt, position, sure;
+
+
+do
+{
+
+
+printf("\n 1) Accept Strings\n 2) Display strings\n 3) Search String(Binary Search)\n 4) Arrange in Ascending(Bubble Sort)\n 5) Arrange in Descending (Selection Sort)\n 6)Quit\n Enter your choice:");
+scanf("%d", &opt);
+switch (opt)
+{
+case 1:
+printf("\nEnter total No. of strings :");
+scanf("%d", &n);
+accept(str, n);
+break;
+
+
+case 2:
+display(str, n);
+break;
+
+
+case 3:
+printf(" Be sure that the strings are already sorted in ascending order");
+printf("\n Proceed??(1/0)");
+scanf("%d", &sure);
+if (sure != 1)
+break;
+printf("\nenter string to be searched:");
+scanf("%s", strfind);
+position = binarysearch(str, strfind, 0, n - 1);
+
+
+if (position == -1)
+printf("\nnot found");
+else
+printf("\n found at location=%d", position + 1);
+
+
+break;
+
+
+case 4:
+bubblesort(str, n);
+
+
+break;
+case 5:
+selectionsort(str, n);
+
+
+break;
+}
+} while (opt != 6);
+return 0;
+}
+
+
+void accept(char str[][20], int n)
+{
+int i;
+printf("\n enter %d strings: ", n);
+for (i = 0; i < n; i++)
+scanf(" %s", str[i]);
+}
+
+
+void display(char str[][20], int n)
+{
+int i;
+printf("\n\tDATA: \n");
+for (i = 0; i < n; i++)
+printf("\n\t%s", str[i]);
+}
+
+
+int binarysearch(char str[][20], char strfind[], int low, int high)
+{
+int mid;
+if (low > high)
+return (-1);
+
+
+mid = (low + high) / 2;
+
+
+if (strcmp(strfind, str[mid]) == 0)
+return (mid);
+
+
+if (strcmp(strfind, str[mid]) > 0)
+return (binarysearch(str, strfind, mid + 1, high));
+
+
+return (binarysearch(str, strfind, low, mid - 1));
+}
+
+
+void bubblesort(char str[][20], int n)
+{
+int i, j, k;
+char temp[20];
+printf("\n Initial Data");
+display(str, n);
+
+
+for (i = 0; i < n - 1; i++) // passes
+{
+
+
+for (j = 0; j < n - i; j++)
+{
+
+
+if (strcmp(str[j], str[j + 1]) > 0) // 1st str is greater
+{
+strcpy(temp, str[j]);
+strcpy(str[j], str[j + 1]);
+strcpy(str[j + 1], temp);
+}
+}
+printf("\n After pass %d:", i);
+display(str, n);
+}
+}
+void selectionsort(char str[][20], int n)
+{
+int i, j, k, max;
+char temp[20];
+printf("\n Initial Data");
+display(str, n);
+
+
+for (i = 0; i < n - 1; i++) // passes
+{
+
+
+max = i;
+for (j = i + 1; j < n; j++)
+{
+
+
+if (strcmp(str[j], str[max]) > 0) // 1st string is greater
+max = j;
+}
+
+
+strcpy(temp, str[i]);
+strcpy(str[i], str[max]);
+strcpy(str[max], temp);
+
+
+printf("\n After pass %d:", i);
+display(str, n);
+}
+}

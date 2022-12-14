@@ -1,0 +1,220 @@
+#include <iostream>
+using namespace std;
+
+struct info
+{
+    char name[20];
+    int age;
+    int Id;
+};
+
+class queue
+{
+    struct node
+    {
+        struct info data;
+        struct node *next;
+    };
+    struct node *front;
+    struct node *rear;
+
+public:
+    void enqueue(struct info);
+    struct info dequeue();
+    int isEmpty()
+    {
+        if (front == NULL)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    void display_q();
+    queue()
+    {
+        front = NULL;
+        rear = NULL;
+    }
+};
+
+void display(info data)
+{
+    cout << data.name << "\t";
+    cout << data.Id << "\t";
+    cout << data.age << "\t";
+};
+
+int priority(int disease)
+{
+    switch (disease)
+    {
+    case 1:
+        return 0;
+    case 2:
+        return 1;
+    case 3:
+        return 0;
+    case 4:
+        return 1;
+    case 5:
+        return 2;
+    default:
+        return -1;
+    }
+    return -1;
+}
+
+void queue::enqueue(struct info temp)
+{
+    struct node *add = new node;
+
+    add->next = NULL;
+
+    add->data = temp;
+
+    if (front == NULL)
+    {
+        front = add;
+        rear = add;
+    }
+    else
+    {
+        rear->next = add;
+        rear = add;
+    }
+};
+
+struct info queue::dequeue()
+{
+    struct node *temp;
+    info pat;
+    if (front == NULL)
+    {
+        pat.Id = -1;
+        return pat;
+    }
+    else if (front == rear)
+    {
+        pat = front->data;
+        front = NULL;
+        rear = NULL;
+        return pat;
+    }
+    else
+    {
+        pat = front->data;
+        temp = front;
+        front = front->next;
+        delete temp;
+        return pat;
+    }
+};
+
+void queue::display_q()
+{
+    struct node *temp;
+    cout << endl;
+    cout << "Name\tAge\tId" << endl;
+    struct info data;
+    temp = front;
+    data.Id = 0;
+    while (temp != NULL)
+    {
+        data = temp->data;
+        display(data);
+        cout << endl;
+        temp = temp->next;
+    }
+};
+
+int main()
+{
+    info data;
+    queue qObj[3];
+    int switchCase, diseasePriority, breakProgram, disease;
+    struct node *temp;
+    do
+    {
+        cout << "Enter Your Choice\n1.Add Patient\n2.Serve Patient\n3.Display Queue\n4.Exit" << endl;
+        cin >> switchCase;
+        switch (switchCase)
+        {
+        case 1:
+            int addMore;
+            do
+            {
+                cout << "Enter Patient Id" << endl;
+                cin >> data.Id;
+                cout << "Enter Patient Name" << endl;
+                cin >> data.name;
+                cout << "Enter Patient Age" << endl;
+                cin >> data.age;
+                cout << "Enter Patient Disease\n1.Cancer\n2.Malaria\n3.TB\n4.Jaundice\n5.Fever" << endl;
+                cin >> disease;
+                diseasePriority = priority(disease);
+                qObj[diseasePriority].enqueue(data);
+                cout << "133\n";
+                cout << "Want To Add More Patients?\n1.Yes\n2.NO" << endl;
+                cin >> addMore;
+            } while (addMore == 1);
+            break;
+        case 2:
+            cout << endl;
+            if (qObj[0].isEmpty() == 0)
+            {
+                data = qObj[0].dequeue();
+                cout << "Patient Served" << endl;
+                cout << "Name\tAge\tId" << endl;
+                display(data);
+                cout << endl;
+            }
+            else if (qObj[1].isEmpty() == 0)
+            {
+                data = qObj[1].dequeue();
+                cout << "Patient Served" << endl;
+                cout << "Name\tAge\tId" << endl;
+                display(data);
+                cout << endl;
+            }
+            else if (qObj[2].isEmpty() == 0)
+            {
+                data = qObj[2].dequeue();
+                cout << "Patient Served" << endl;
+                cout << "Name\tAge\tId" << endl;
+                display(data);
+                cout << endl;
+            }
+            else
+            {
+                cout << endl
+                     << "All Patients Served" << endl;
+            }
+            cout << endl;
+            break;
+        case 3:
+            cout << "Serious Patients:" << endl;
+            qObj[0].display_q();
+            cout << endl
+                 << endl;
+            cout << "Moderate Patients:" << endl;
+            qObj[1].display_q();
+            cout << endl
+                 << endl;
+            cout << "General Check-up Patients:" << endl;
+            qObj[2].display_q();
+            cout << endl
+                 << endl;
+            break;
+        case 4:
+            break;
+        default:
+            cout << endl
+                 << "Error Input" << endl;
+        }
+    } while (switchCase != 4);
+
+    return 0;
+}
